@@ -2,6 +2,9 @@
 
 把 **OpenCode 自研 AI 能力**（子代理、命令、提交审查）以及 **obra/superpowers** 在其他 harness 上的项目级切片，安装进任意工程仓库。
 
+> 写代码想靠 AI 守住代码规范、测试和 Git 提交约定，却每个项目都要重新配置？  
+> **ai-framework-skill**：一次集成，规范跟项目走。
+
 > **仅项目级** — 配置只写入目标业务项目根目录，不写入各 IDE 全局目录。
 
 - GitHub: https://github.com/Userluckytian/ai-framework-skill
@@ -40,4 +43,4 @@ npx skills add Userluckytian/ai-framework-skill@ai-framework -y
 
 ## License
 
-本仓库自有文件见 [LICENSE](LICENSE)。superpowers 切片遵循其 MIT 许可。
+本仓库自有文件见 [LICENSE](LICENSE)。从 superpowers 复制的切片遵循其 MIT 许可。
