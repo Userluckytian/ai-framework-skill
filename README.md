@@ -1,10 +1,10 @@
 # ai-framework-skill
 
-把 **OpenCode 自研 AI 能力**（子代理、命令、提交审查）以及 **obra/superpowers** 在其他 harness 上的项目级切片，安装进任意工程仓库。
+> [!CAUTION]
+> ## 写代码想靠 AI 守住代码规范、测试和 Git 提交约定，却每个项目都要重新配置？
+> ### 👉 ai-framework-skill：一次集成，规范跟项目走。
 
-> [!IMPORTANT]
-> **写代码想靠 AI 守住代码规范、测试和 Git 提交约定，却每个项目都要重新配置？**  
-> **ai-framework-skill：一次集成，规范跟项目走。**
+把 **OpenCode 自研 AI 能力**（子代理、命令、提交审查）以及 **obra/superpowers** 在其他 harness 上的项目级切片，安装进任意工程仓库。
 
 > [!NOTE]
 > **仅项目级** — 配置只写入目标业务项目根目录，不写入各 IDE 全局目录。
