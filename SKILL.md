@@ -3,7 +3,7 @@ name: ai-framework
 description: >
   将可复用 AI 工程能力安装到当前项目（仅项目级）。支持 OpenCode 自研 agents/commands，
   以及 Codex / Claude / Cursor 等基于 obra/superpowers 的项目级切片。
-  在用户说「安装 AI 框架」「/ai-framework」「给新仓库装 AI 配置」时使用。
+  在用户说「集成ai框架到当前项目」「安装 AI 框架」「/ai-framework」时使用。
 ---
 
 # AI Framework（仅项目级安装）
