@@ -1,0 +1,26 @@
+# {{PROJECT_NAME}} 项目指令
+
+## Git 提交规范
+
+提交信息格式：`<gitmoji><type>(<scope>): <中文描述>`
+
+- type: feat / fix / docs / style / refactor / test / chore / perf / ci / revert
+- scope: 项目模块名（auth / api / login / layout / theme / i18n 等）
+- 描述使用中文，祈使语气，首字母不大写，结尾不加句号
+- 首行不超过 50 字符，正文每行不超过 72 字符
+
+示例：
+```
+✨feat(auth): 添加用户注册接口
+🐛fix(login): 修复登录报错弹窗重复显示
+♻️refactor(api): 请求拦截器支持 showGlobalError 开关
+```
+
+## 代码规范
+
+- Vue 3 + TypeScript + Vite
+- 组件命名使用 PascalCase，文件名与组件名一致
+- 组合式函数以 `use` 前缀命名
+- API 模块统一放在 `src/api/modules/` 下
+- 样式使用 scoped SCSS，主题变量使用 CSS 变量
+- 最小修改原则：不推倒重构，只改动必要部分
