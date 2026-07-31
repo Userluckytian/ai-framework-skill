@@ -1,10 +1,10 @@
 # ai-framework-skill
 
-把 **OpenCode 自研 AI 能力**（子代理、命令、提交审查）以及 **obra/superpowers** 在其他 harness 上的项目级切片，安装进任意工程仓库。
+把 **OpenCode 自研 AI 能力**（子代理、命令、提交审查、**阶段化计划驱动**）以及 **obra/superpowers** 在其他 harness 上的项目级切片，安装进任意工程仓库。
 
 > [!IMPORTANT]
-> <font color="#008000"><strong>写代码想靠 AI 守住代码规范、测试和 Git 提交约定，却每个项目都要重新配置？</strong></font>  
-> <font color="#008000"><strong>ai-framework-skill：一次集成，规范跟项目走。</strong></font>
+> <font color="#008000"><strong>写代码想靠 AI 守住规范与交付节奏，却每个项目都要重新配置？</strong></font>  
+> <font color="#008000"><strong>ai-framework-skill：一次集成，审查流 + 阶段计划/验收跟项目走。</strong></font>
 
 > [!NOTE]
 > **仅项目级** — 配置只写入目标业务项目根目录，不写入各 IDE 全局目录。
@@ -31,15 +31,30 @@ npx skills add Userluckytian/ai-framework-skill@ai-framework -y
 
 按提示选择工具（OpenCode / Codex / Claude / All 等）即可。
 
+### 安装 OpenCode 后常用命令
+
+| 命令 | 用途 |
+|------|------|
+| `/plan-phase` | 起草阶段计划（Task + 测试 + 验收表 + 交接提示词） |
+| `/handoff` | 生成可粘贴给执行 AI 的提示词 |
+| `/accept-phase` | 对照计划独立验收（基线 / 对照表 / 结论 / 下一步） |
+| `/review` | **提交前**综合审查（风格 + 测试 + 依赖） |
+
+元规范落在：`docs/ai-framework/phased-plan-driven.md`。  
+计划实例：`docs/ai-framework/plans/`（也可继续用已有的 `docs/superpowers/plans/`）。
+
+**原则**：边界先于功能 → 计划可交接 → 任务可验证 → 验收认证据。
+
 ---
 
 ## 内容来源
 
 | 分区 | 来源 |
 |------|------|
-| `templates/opencode` | 自研 OpenCode agents / commands |
+| `templates/opencode` | 自研 OpenCode agents / commands（审查四件套 + **phase-planner / phase-acceptor**） |
+| `templates/common/docs` | **阶段化计划驱动**元规范与计划模板 |
 | `templates/codex`、`claude`、`others` | [obra/superpowers](https://github.com/obra/superpowers)（MIT） |
-| `templates/common` | 提交规范、审查清单、可参数化编码/架构说明 |
+| `templates/common` | AGENTS、提交/审查清单、可参数化编码与架构说明 |
 
 更多说明见 [docs/](docs/)、[SKILL.md](SKILL.md)、[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
 

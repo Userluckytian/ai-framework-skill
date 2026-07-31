@@ -1,5 +1,11 @@
 # {{PROJECT_NAME}} 项目指令
 
+## 阶段化协作（若已安装 OpenCode / ai-framework）
+
+大块功能按 `docs/ai-framework/phased-plan-driven.md`：**计划 → 交接提示词 → 执行 → 证据验收**。  
+计划目录：`docs/ai-framework/plans/` 或 `docs/superpowers/plans/`。  
+单次提交审查用 `CODE_REVIEW.md`；整阶段验收输出四段结论（基线/对照表/结论/下一步）。
+
 ## Git 提交规范
 
 提交信息格式：`<gitmoji><type>(<scope>): <中文描述>`
@@ -8,6 +14,7 @@
 - scope: 项目模块名（auth / api / login / layout / theme / i18n 等）
 - 描述使用中文，祈使语气，首字母不大写，结尾不加句号
 - 首行不超过 50 字符，正文每行不超过 72 字符
+- 默认不 `git push`，除非人类明确要求
 
 示例：
 ```
@@ -18,9 +25,6 @@
 
 ## 代码规范
 
-- Vue 3 + TypeScript + Vite
-- 组件命名使用 PascalCase，文件名与组件名一致
-- 组合式函数以 `use` 前缀命名
-- API 模块统一放在 `src/api/modules/` 下
-- 样式使用 scoped SCSS，主题变量使用 CSS 变量
+- 以仓库内 `coding-standards.md` / `architecture.md` 为准（若存在）
 - 最小修改原则：不推倒重构，只改动必要部分
+- 密钥与真实凭证不进 git；验收认命令输出不认「应该能过」

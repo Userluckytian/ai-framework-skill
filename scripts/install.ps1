@@ -68,9 +68,11 @@ function Write-Log([string]$msg) {
   Write-Host $msg
 }
 
-function Ensure-Dir([string]$path) {
-  if (-not (Test-Path $path)) {
-    New-Item -ItemType Directory -Path $path -Force | Out-Null
+function Ensure-Dir {
+  param([string]$Dir)
+  if ([string]::IsNullOrWhiteSpace($Dir)) { return }
+  if (-not [System.IO.Directory]::Exists($Dir)) {
+    [void][System.IO.Directory]::CreateDirectory($Dir)
   }
 }
 
@@ -80,14 +82,20 @@ function Render-Text([string]$text) {
 
 function Place-File {
   param(
-    [string]$SourcePath,
-    [string]$DestPath,
+    [Parameter(Mandatory = $true)][string]$SourcePath,
+    [Parameter(Mandatory = $true)][string]$DestPath,
     [switch]$Render
   )
 
-  Ensure-Dir (Split-Path $DestPath -Parent)
+  if (-not [System.IO.File]::Exists($SourcePath)) {
+    Write-Log "MISSING source $SourcePath"
+    return
+  }
 
-  if (Test-Path $DestPath) {
+  $parentDir = [System.IO.Path]::GetDirectoryName($DestPath)
+  Ensure-Dir -Dir $parentDir
+
+  if ([System.IO.File]::Exists($DestPath)) {
     switch ($Conflict) {
       'skip' {
         Write-Log "SKIP  $DestPath"
@@ -95,7 +103,7 @@ function Place-File {
       }
       'backup' {
         $bak = "$DestPath.bak"
-        Copy-Item -LiteralPath $DestPath -Destination $bak -Force
+        [System.IO.File]::Copy($DestPath, $bak, $true)
         Write-Log "BACKUP $DestPath -> $bak"
       }
       'overwrite' {
@@ -105,11 +113,11 @@ function Place-File {
   }
 
   if ($Render) {
-    $raw = Get-Content -LiteralPath $SourcePath -Raw -Encoding UTF8
+    $raw = [System.IO.File]::ReadAllText($SourcePath, [System.Text.UTF8Encoding]::new($false))
     $out = Render-Text $raw
     [System.IO.File]::WriteAllText($DestPath, $out, [System.Text.UTF8Encoding]::new($false))
   } else {
-    Copy-Item -LiteralPath $SourcePath -Destination $DestPath -Force
+    [System.IO.File]::Copy($SourcePath, $DestPath, $true)
   }
   Write-Log "WRITE $DestPath"
 }
@@ -140,28 +148,39 @@ function Install-OpenCode {
   Write-Log "=== OpenCode ==="
   $src = Join-Path $Templates 'opencode'
   $dst = Join-Path $TargetRoot '.opencode'
-  Ensure-Dir $dst
-  Place-File (Join-Path $src 'opencode.jsonc') (Join-Path $dst 'opencode.jsonc')
+  Ensure-Dir -Dir $dst
+  Place-File -SourcePath (Join-Path $src 'opencode.jsonc') -DestPath (Join-Path $dst 'opencode.jsonc')
   Copy-Tree (Join-Path $src 'agents') (Join-Path $dst 'agents') -RenderMarkdown
   Copy-Tree (Join-Path $src 'commands') (Join-Path $dst 'commands') -RenderMarkdown
 
   $common = Join-Path $Templates 'common'
-  Place-File (Join-Path $common 'AGENTS.md.template') (Join-Path $TargetRoot 'AGENTS.md') -Render
-  Place-File (Join-Path $common 'CODE_REVIEW.md') (Join-Path $TargetRoot 'CODE_REVIEW.md')
-  Place-File (Join-Path $common 'coding-standards.md.template') (Join-Path $TargetRoot 'coding-standards.md') -Render
-  Place-File (Join-Path $common 'architecture.md.template') (Join-Path $TargetRoot 'architecture.md') -Render
+  Place-File -SourcePath (Join-Path $common 'AGENTS.md.template') -DestPath (Join-Path $TargetRoot 'AGENTS.md') -Render
+  Place-File -SourcePath (Join-Path $common 'CODE_REVIEW.md') -DestPath (Join-Path $TargetRoot 'CODE_REVIEW.md')
+  Place-File -SourcePath (Join-Path $common 'coding-standards.md.template') -DestPath (Join-Path $TargetRoot 'coding-standards.md') -Render
+  Place-File -SourcePath (Join-Path $common 'architecture.md.template') -DestPath (Join-Path $TargetRoot 'architecture.md') -Render
+
+  # 阶段化计划驱动（元规范 + 空白计划模板 + plans 目录）
+  # 使用 Combine，避免 Join-Path 多段 ChildPath 在部分主机上异常
+  $afDocs = [System.IO.Path]::Combine($TargetRoot, 'docs', 'ai-framework')
+  $afPlans = [System.IO.Path]::Combine($afDocs, 'plans')
+  Ensure-Dir -Dir $afPlans
+  $commonDocs = [System.IO.Path]::Combine($common, 'docs')
+  Place-File -SourcePath ([System.IO.Path]::Combine($commonDocs, 'phased-plan-driven.md.template')) -DestPath ([System.IO.Path]::Combine($afDocs, 'phased-plan-driven.md')) -Render
+  Place-File -SourcePath ([System.IO.Path]::Combine($commonDocs, 'phase-plan.template.md')) -DestPath ([System.IO.Path]::Combine($afDocs, 'phase-plan.template.md')) -Render
+  Place-File -SourcePath ([System.IO.Path]::Combine($commonDocs, 'plans-README.md.template')) -DestPath ([System.IO.Path]::Combine($afPlans, 'README.md')) -Render
 }
 
 function Install-Codex {
   Write-Log "=== Codex ==="
   $src = Join-Path $Templates 'codex'
   Copy-Tree (Join-Path $src '.codex-plugin') (Join-Path $TargetRoot '.codex-plugin')
-  $docs = Join-Path $TargetRoot 'docs\ai-framework'
-  Ensure-Dir $docs
-  if (Test-Path (Join-Path $src 'references\codex-tools.md')) {
-    Place-File (Join-Path $src 'references\codex-tools.md') (Join-Path $docs 'codex-tools.md')
+  $docs = [System.IO.Path]::Combine($TargetRoot, 'docs', 'ai-framework')
+  Ensure-Dir -Dir $docs
+  $codexTools = [System.IO.Path]::Combine($src, 'references', 'codex-tools.md')
+  if (Test-Path -LiteralPath $codexTools) {
+    Place-File -SourcePath $codexTools -DestPath ([System.IO.Path]::Combine($docs, 'codex-tools.md'))
   }
-  Place-File (Join-Path $src 'INSTALL.md') (Join-Path $docs 'codex-INSTALL.md')
+  Place-File -SourcePath (Join-Path $src 'INSTALL.md') -DestPath ([System.IO.Path]::Combine($docs, 'codex-INSTALL.md'))
 }
 
 function Install-Claude {
@@ -171,10 +190,10 @@ function Install-Claude {
   # project-level hooks under .claude/hooks for clarity
   Copy-Tree (Join-Path $src 'hooks') (Join-Path $TargetRoot '.claude\hooks')
   $common = Join-Path $Templates 'common'
-  Place-File (Join-Path $common 'CLAUDE.md.template') (Join-Path $TargetRoot 'CLAUDE.md') -Render
-  $docs = Join-Path $TargetRoot 'docs\ai-framework'
-  Ensure-Dir $docs
-  Place-File (Join-Path $src 'INSTALL.md') (Join-Path $docs 'claude-INSTALL.md')
+  Place-File -SourcePath (Join-Path $common 'CLAUDE.md.template') -DestPath (Join-Path $TargetRoot 'CLAUDE.md') -Render
+  $docs = [System.IO.Path]::Combine($TargetRoot, 'docs', 'ai-framework')
+  Ensure-Dir -Dir $docs
+  Place-File -SourcePath (Join-Path $src 'INSTALL.md') -DestPath ([System.IO.Path]::Combine($docs, 'claude-INSTALL.md'))
 }
 
 function Install-Others {

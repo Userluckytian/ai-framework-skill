@@ -116,6 +116,14 @@ install_opencode() {
   copy_file "$common/CODE_REVIEW.md" "$TARGET_ROOT/CODE_REVIEW.md"
   render_file "$common/coding-standards.md.template" "$TARGET_ROOT/coding-standards.md"
   render_file "$common/architecture.md.template" "$TARGET_ROOT/architecture.md"
+
+  # Phased plan-driven delivery
+  local af_docs="$TARGET_ROOT/docs/ai-framework"
+  local af_plans="$af_docs/plans"
+  ensure_dir "$af_plans"
+  render_file "$common/docs/phased-plan-driven.md.template" "$af_docs/phased-plan-driven.md"
+  render_file "$common/docs/phase-plan.template.md" "$af_docs/phase-plan.template.md"
+  render_file "$common/docs/plans-README.md.template" "$af_plans/README.md"
 }
 
 install_codex() {
