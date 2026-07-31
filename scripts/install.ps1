@@ -199,8 +199,8 @@ function Install-Claude {
 function Install-Others {
   Write-Log "=== Others ==="
   $src = Join-Path $Templates 'others'
-  $docs = Join-Path $TargetRoot 'docs\ai-framework\others'
-  Ensure-Dir $docs
+  $docs = [System.IO.Path]::Combine($TargetRoot, 'docs', 'ai-framework', 'others')
+  Ensure-Dir -Dir $docs
   Copy-Tree $src $docs
 }
 
