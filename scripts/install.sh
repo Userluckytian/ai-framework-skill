@@ -112,23 +112,43 @@ copy_tree() {
   done < <(find "$src" -type f -print0)
 }
 
+# More portable list_personas + interactive selection (avoid GNU-find -printf and bash mapfile)
 list_personas() {
   local dir="$TEMPLATES/common/prompts"
   if [[ ! -d "$dir" ]]; then
     return
   fi
-  find "$dir" -maxdepth 1 -type f -name '*.md' -printf '%f\n' 2>/dev/null | sort
+
+  local files
+  files=("$dir"/*.md)
+
+  # If glob didn't match, files[0] will be literal pattern; ensure it exists
+  if [[ ! -e "${files[0]}" ]]; then
+    return
+  fi
+
+  for f in "${files[@]}"; do
+    if [[ -f "$f" ]]; then
+      printf '%s\n' "${f##*/}"
+    fi
+  done | sort
 }
 
 select_persona_interactive() {
   # return selected filename in PERSONA or empty
-  local files
-  mapfile -t files < <(list_personas)
+  local files=()
+  local line
+
+  while IFS= read -r line; do
+    files+=("$line")
+  done < <(list_personas)
+
   if [[ ${#files[@]} -eq 0 ]]; then
     log "没有可用的 persona 模板，跳过。"
     PERSONA=""
     return
   fi
+
   log "请选择要安装的 persona："
   local i=1
   for f in "${files[@]}"; do
@@ -230,4 +250,4 @@ case "$TOOL" in
   *) echo "bad tool: $TOOL" >&2; exit 1 ;;
 esac
 
-log "Done. Global harness dirs were NOT modified."
+log "Done. Global harness dirs were NOT modified." 
