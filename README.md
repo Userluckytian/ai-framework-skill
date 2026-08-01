@@ -58,6 +58,16 @@ npx skills add Userluckytian/ai-framework-skill@ai-framework -y
 
 更多说明见 [docs/](docs/)、[SKILL.md](SKILL.md)、[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
 
+## Persona / Role templates
+
+项目级 persona（角色设定）模板存放在 `templates/common/prompts/`。若安装脚本或交互时启用 persona，安装程序会列出该目录下的可用模板供用户选择并把所选 persona 写入目标项目（默认不安装）。
+
+在添加新的角色设定时，请在 README 中注明来源并保留原始作者信息。例如：
+
+- 海鸥.md — 来源: https://github.com/yynxxxxx/Codex-X/blob/main/examples/%E6%B5%B8%E9%B8%A53.0%E7%A0%B4%E7%94%B2.md
+
+请确保在将外部模板原样复制到本仓库或分发前已确认其许可与授权兼容性。
+
 ## License
 
 本仓库自有文件见 [LICENSE](LICENSE)。从 superpowers 复制的切片遵循其 MIT 许可。
