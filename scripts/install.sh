@@ -8,6 +8,8 @@ PROJECT_NAME=""
 CSS_PREFIX="app"
 CONFLICT="backup"
 SKILL_ROOT=""
+PERSONA=""
+NO_PERSONA=false
 
 usage() {
   cat <<'EOF'
@@ -15,6 +17,11 @@ Usage:
   install.sh --target PATH --tool opencode|codex|claude|all|others
              [--project-name NAME] [--css-prefix PREFIX]
              [--conflict overwrite|skip|backup] [--skill-root PATH]
+             [--persona FILENAME] [--no-persona]
+
+Notes:
+  --persona specifies a persona (from templates/common/prompts/*.md) to write into the target CLAUDE.md (opt-in).
+  --no-persona skips persona installation (default behavior if neither provided nor accepted interactively).
 EOF
 }
 
@@ -26,6 +33,8 @@ while [[ $# -gt 0 ]]; do
     --css-prefix) CSS_PREFIX="$2"; shift 2 ;;
     --conflict) CONFLICT="$2"; shift 2 ;;
     --skill-root) SKILL_ROOT="$2"; shift 2 ;;
+    --persona) PERSONA="$2"; shift 2 ;;
+    --no-persona) NO_PERSONA=true; shift ;;
     -h|--help) usage; exit 0 ;;
     *) echo "Unknown arg: $1"; usage; exit 1 ;;
   esac
@@ -50,7 +59,7 @@ if [[ -z "$PROJECT_NAME" ]]; then
   if [[ -f "$TARGET_ROOT/package.json" ]] && command -v node >/dev/null 2>&1; then
     PROJECT_NAME="$(node -pe "require('$TARGET_ROOT/package.json').name" 2>/dev/null || true)"
   fi
-  PROJECT_NAME="${PROJECT_NAME:-$(basename "$TARGET_ROOT")}"
+  PROJECT_NAME="${PROJECT_NAME:-$(basename "$TARGET_ROOT") }"
 fi
 
 log() { printf '%s\n' "$*"; }
@@ -68,8 +77,8 @@ render_file() {
     esac
   fi
   # portable-ish replace without requiring envsubst for custom delimiters
-  sed -e "s/{{PROJECT_NAME}}/${PROJECT_NAME//\//\\/}/g" \
-      -e "s/{{CSS_PREFIX}}/${CSS_PREFIX//\//\\/}/g" \
+  sed -e "s/{{PROJECT_NAME}}/${PROJECT_NAME//\//\\\/}/g" \
+      -e "s/{{CSS_PREFIX}}/${CSS_PREFIX//\//\\\/}/g" \
       "$src" > "$dest"
   log "WRITE $dest"
 }
@@ -101,6 +110,39 @@ copy_tree() {
       copy_file "$f" "$out"
     fi
   done < <(find "$src" -type f -print0)
+}
+
+list_personas() {
+  local dir="$TEMPLATES/common/prompts"
+  if [[ ! -d "$dir" ]]; then
+    return
+  fi
+  find "$dir" -maxdepth 1 -type f -name '*.md' -printf '%f\n' 2>/dev/null | sort
+}
+
+select_persona_interactive() {
+  # return selected filename in PERSONA or empty
+  local files
+  mapfile -t files < <(list_personas)
+  if [[ ${#files[@]} -eq 0 ]]; then
+    log "没有可用的 persona 模板，跳过。"
+    PERSONA=""
+    return
+  fi
+  log "请选择要安装的 persona："
+  local i=1
+  for f in "${files[@]}"; do
+    printf '  %d) %s\n' "$i" "$f"
+    i=$((i+1))
+  done
+  printf '  0) 取消\n'
+  read -p "输入序号并回车: " sel
+  if [[ "$sel" =~ ^[0-9]+$ ]] && [ "$sel" -gt 0 ] && [ "$sel" -le ${#files[@]} ]; then
+    PERSONA="${files[$((sel-1))]}"
+  else
+    log "取消 persona 安装，继续默认流程。"
+    PERSONA=""
+  fi
 }
 
 install_opencode() {
@@ -141,6 +183,18 @@ install_claude() {
   copy_tree "$src/.claude-plugin" "$TARGET_ROOT/.claude-plugin" 0
   copy_tree "$src/hooks" "$TARGET_ROOT/.claude/hooks" 0
   render_file "$TEMPLATES/common/CLAUDE.md.template" "$TARGET_ROOT/CLAUDE.md"
+
+  # persona handling: if PERSONA set, copy it over (opt-in)
+  if [[ -n "$PERSONA" ]]; then
+    local psrc="$TEMPLATES/common/prompts/$PERSONA"
+    if [[ -f "$psrc" ]]; then
+      copy_file "$psrc" "$TARGET_ROOT/CLAUDE.md"
+      log "Installed persona: $PERSONA -> $TARGET_ROOT/CLAUDE.md"
+    else
+      log "Persona file not found: $psrc"
+    fi
+  fi
+
   ensure_dir "$TARGET_ROOT/docs/ai-framework"
   copy_file "$src/INSTALL.md" "$TARGET_ROOT/docs/ai-framework/claude-INSTALL.md"
 }
@@ -150,9 +204,22 @@ install_others() {
   copy_tree "$TEMPLATES/others" "$TARGET_ROOT/docs/ai-framework/others" 0
 }
 
+# Interactive persona selection when not provided nor explicitly disabled
+if [[ -z "$PERSONA" && "$NO_PERSONA" = false && -t 0 ]]; then
+  read -p "是否采用特定角色设定（persona）？ (y/N): " yn
+  case "$yn" in
+    [Yy]*)
+      select_persona_interactive
+      ;;
+    *)
+      log "不安装 persona，继续默认流程."
+      ;;
+  esac
+fi
+
 log "SkillRoot=$SKILL_ROOT"
 log "TargetRoot=$TARGET_ROOT"
-log "Tool=$TOOL ProjectName=$PROJECT_NAME CssPrefix=$CSS_PREFIX Conflict=$CONFLICT"
+log "Tool=$TOOL ProjectName=$PROJECT_NAME CssPrefix=$CSS_PREFIX Conflict=$CONFLICT Persona=${PERSONA:-<none>}"
 
 case "$TOOL" in
   opencode) install_opencode ;;
