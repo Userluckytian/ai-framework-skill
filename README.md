@@ -46,6 +46,9 @@ npx skills add Userluckytian/ai-framework-skill@ai-framework -y
 
 **原则**：边界先于功能 → 计划可交接 → 任务可验证 → 验收认证据。
 
+**三原则（元规范）**：任务定义落盘（不丢）→ 进度靠 commit+验收表判定（可恢复）→ 子代理任务幂等（可重放）。  
+> 落点：`docs/ai-framework/phased-plan-driven.md` §1.1。  
+
 ---
 
 ## 内容来源
