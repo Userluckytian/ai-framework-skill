@@ -40,8 +40,9 @@ npx skills add Userluckytian/ai-framework-skill@ai-framework -y
 | `/accept-phase` | 对照计划独立验收（基线 / 对照表 / 结论 / 下一步） |
 | `/review` | **提交前**综合审查（风格 + 测试 + 依赖） |
 
-元规范落在：`docs/ai-framework/phased-plan-driven.md`。  
-计划实例：`docs/ai-framework/plans/`（也可继续用已有的 `docs/superpowers/plans/`）。
+元规范落在：`docs/ai-framework/phased-plan-driven.md`（单阶段内：计划→交接→验收 + **验证不通过项下放机制**）。  
+多阶段/多执行者编排（总览 + 执行计划 + 并行派工）另见：`docs/ai-framework/plan-layering.md`。  
+计划实例：`docs/ai-framework/plans/`（也可继续用已有的 `docs/superpowers/plans/`）。  
 
 **原则**：边界先于功能 → 计划可交接 → 任务可验证 → 验收认证据。
 

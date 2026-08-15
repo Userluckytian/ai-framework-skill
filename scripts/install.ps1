@@ -167,6 +167,7 @@ function Install-OpenCode {
   $commonDocs = [System.IO.Path]::Combine($common, 'docs')
   Place-File -SourcePath ([System.IO.Path]::Combine($commonDocs, 'phased-plan-driven.md.template')) -DestPath ([System.IO.Path]::Combine($afDocs, 'phased-plan-driven.md')) -Render
   Place-File -SourcePath ([System.IO.Path]::Combine($commonDocs, 'phase-plan.template.md')) -DestPath ([System.IO.Path]::Combine($afDocs, 'phase-plan.template.md')) -Render
+  Place-File -SourcePath ([System.IO.Path]::Combine($commonDocs, 'plan-layering.md.template')) -DestPath ([System.IO.Path]::Combine($afDocs, 'plan-layering.md')) -Render
   Place-File -SourcePath ([System.IO.Path]::Combine($commonDocs, 'plans-README.md.template')) -DestPath ([System.IO.Path]::Combine($afPlans, 'README.md')) -Render
 }
 

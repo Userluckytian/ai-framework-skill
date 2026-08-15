@@ -185,6 +185,7 @@ install_opencode() {
   ensure_dir "$af_plans"
   render_file "$common/docs/phased-plan-driven.md.template" "$af_docs/phased-plan-driven.md"
   render_file "$common/docs/phase-plan.template.md" "$af_docs/phase-plan.template.md"
+  render_file "$common/docs/plan-layering.md.template" "$af_docs/plan-layering.md"
   render_file "$common/docs/plans-README.md.template" "$af_plans/README.md"
 }
 

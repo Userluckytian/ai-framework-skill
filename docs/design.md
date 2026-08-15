@@ -47,6 +47,7 @@
 - `.opencode/commands/plan-phase.md`、`accept-phase.md`、`handoff.md`  
 - `docs/ai-framework/phased-plan-driven.md`  
 - `docs/ai-framework/phase-plan.template.md`  
+- `docs/ai-framework/plan-layering.md`（多阶段编排：总览/执行分层 + 并行派工表）
 - `docs/ai-framework/plans/README.md`  
 
 ## 实践来源
