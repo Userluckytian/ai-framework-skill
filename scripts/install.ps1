@@ -6,7 +6,7 @@
   Destination project root.
 
 .PARAMETER Tool
-  opencode | codex | claude | all | others
+  opencode | codex | claude | all | others | jspace
 
 .PARAMETER ProjectName
   Replaces {{PROJECT_NAME}}
@@ -26,7 +26,7 @@ param(
   [string]$TargetRoot,
 
   [Parameter(Mandatory = $true)]
-  [ValidateSet('opencode', 'codex', 'claude', 'all', 'others')]
+  [ValidateSet('opencode', 'codex', 'claude', 'all', 'others', 'jspace')]
   [string]$Tool,
 
   [string]$ProjectName = '',
@@ -212,6 +212,49 @@ function Install-Others {
   Copy-Tree $src $docs
 }
 
+function Install-JSpace {
+  Write-Log "=== J-Space (project-level skill) ==="
+  $src = Join-Path $Templates 'j-space'
+  $dst = [System.IO.Path]::Combine($TargetRoot, '.grok', 'skills', 'j-space')
+  if (-not (Test-Path -LiteralPath $src)) {
+    Write-Log "MISSING source $src"
+    return
+  }
+  if (Test-Path -LiteralPath $dst) {
+    switch ($Conflict) {
+      'skip' {
+        Write-Log "SKIP  $dst"
+        return
+      }
+      'backup' {
+        $bak = "$dst.bak"
+        if (Test-Path -LiteralPath $bak) { Remove-Item -LiteralPath $bak -Recurse -Force }
+        Rename-Item -LiteralPath $dst -NewName ([System.IO.Path]::GetFileName($bak))
+        Write-Log "BACKUP $dst -> $bak"
+      }
+      'overwrite' {
+        Write-Log "OVERWRITE $dst"
+        Remove-Item -LiteralPath $dst -Recurse -Force
+      }
+    }
+  }
+  Ensure-Dir -Dir ([System.IO.Path]::GetDirectoryName($dst))
+  Copy-Item -LiteralPath $src -Destination $dst -Recurse
+  Write-Log "WRITE $dst"
+
+  # 桥接文档（J-Space × 阶段化计划驱动）：进 docs/ai-framework/，随仓库走
+  $bridgeDoc = [System.IO.Path]::Combine($TargetRoot, 'docs', 'ai-framework', 'j-space-bridge.md')
+  Place-File -SourcePath (Join-Path $Templates (Join-Path 'common' (Join-Path 'docs' 'j-space-bridge.md.template'))) -DestPath $bridgeDoc -Render
+
+  # 默认启用规则（Grok 常驻）：进 .grok/rules/，装上即默认
+  $rulesDir = [System.IO.Path]::Combine($TargetRoot, '.grok', 'rules')
+  Ensure-Dir -Dir $rulesDir
+  $rulesFile = Join-Path $src 'rules\j-space-default.md'
+  if (Test-Path -LiteralPath $rulesFile) {
+    Place-File -SourcePath $rulesFile -DestPath ([System.IO.Path]::Combine($rulesDir, 'j-space-default.md'))
+  }
+}
+
 Write-Log "SkillRoot  = $SkillRoot"
 Write-Log "TargetRoot = $TargetRoot"
 Write-Log "Tool       = $Tool"
@@ -228,8 +271,10 @@ switch ($Tool) {
     Install-OpenCode
     Install-Codex
     Install-Claude
+    Install-JSpace
   }
   'others' { Install-Others }
+  'jspace' { Install-JSpace }
 }
 
 Write-Log ""

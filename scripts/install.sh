@@ -15,7 +15,7 @@ NO_PERSONA=false
 usage() {
   cat <<'EOF'
 Usage:
-  install.sh --target PATH --tool opencode|codex|claude|all|others
+  install.sh --target PATH --tool opencode|codex|claude|all|others|jspace
              [--project-name NAME] [--css-prefix PREFIX]
              [--vision-model PROVIDER/MODEL] [--conflict overwrite|skip|backup] [--skill-root PATH]
              [--persona FILENAME] [--no-persona]
@@ -233,6 +233,34 @@ install_others() {
   copy_tree "$TEMPLATES/others" "$TARGET_ROOT/docs/ai-framework/others" 0
 }
 
+install_jspace() {
+  log "=== J-Space (project-level skill) ==="
+  local src="$TEMPLATES/j-space"
+  local dst="$TARGET_ROOT/.grok/skills/j-space"
+  if [[ ! -d "$src" ]]; then
+    log "MISSING $src"
+    return
+  fi
+  if [[ -e "$dst" ]]; then
+    case "$CONFLICT" in
+      skip) log "SKIP  $dst"; return ;;
+      backup) rm -rf "$dst.bak"; cp -r "$dst" "$dst.bak"; log "BACKUP $dst -> $dst.bak" ;;
+      overwrite) log "OVERWRITE $dst"; rm -rf "$dst" ;;
+    esac
+  fi
+  mkdir -p "$(dirname "$dst")"
+  cp -r "$src" "$dst"
+  log "WRITE $dst"
+
+  # 桥接文档（J-Space × 阶段化计划驱动）：进 docs/ai-framework/，随仓库走
+  ensure_dir "$TARGET_ROOT/docs/ai-framework"
+  render_file "$TEMPLATES/common/docs/j-space-bridge.md.template" "$TARGET_ROOT/docs/ai-framework/j-space-bridge.md"
+
+  # 默认启用规则（Grok 常驻）：进 .grok/rules/，装上即默认
+  ensure_dir "$TARGET_ROOT/.grok/rules"
+  copy_file "$src/rules/j-space-default.md" "$TARGET_ROOT/.grok/rules/j-space-default.md"
+}
+
 # Interactive persona selection when not provided nor explicitly disabled
 if [[ -z "$PERSONA" && "$NO_PERSONA" = false && -t 0 ]]; then
   read -p "是否采用特定角色设定（persona）？ (y/N): " yn
@@ -254,8 +282,9 @@ case "$TOOL" in
   opencode) install_opencode ;;
   codex) install_codex ;;
   claude) install_claude ;;
-  all) install_opencode; install_codex; install_claude ;;
+  all) install_opencode; install_codex; install_claude; install_jspace ;;
   others) install_others ;;
+  jspace) install_jspace ;;
   *) echo "bad tool: $TOOL" >&2; exit 1 ;;
 esac
 

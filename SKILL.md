@@ -16,7 +16,10 @@ description: >
 安装后目标项目具备两层能力：
 
 1. **阶段化计划驱动**：`/plan-phase` → 执行（交接提示词）→ `/accept-phase`  
-2. **提交前审查**：`/style` `/test` `/deps` `/review`
+2. **提交前审查**：`/style` `/test` `/deps` `/review`  
+3. **（可选）J-Space 推理时控制**：`/j-space` skill + 桥接文档（选项 f）
+
+所有能力遵循 **规模门控**：S 小改零仪式 → M 中改针对性验证 → L 大改完整阶段流。
 
 ## 何时使用
 
@@ -48,6 +51,7 @@ description: >
 | **c** Claude Code | superpowers Claude 项目级切片 |
 | **d** All | a + b + c |
 | **e** Others | Cursor / Gemini / Kimi 参考切片 |
+| **f** J-Space | 整块装入 `j-space/` 推理时控制 skill 到 `.grok/skills/j-space/` + 桥接文档 + `.grok/rules/j-space-default.md` 常驻规则（**默认启用，无需显式 `/j-space`**） |
 
 **不要**询问 global / project 作用域——固定为项目级。
 
@@ -65,11 +69,11 @@ description: >
 ### 5. 执行安装
 
 ```powershell
-pwsh -File "<SKILL_ROOT>/scripts/install.ps1" -TargetRoot "<PROJECT_ROOT>" -Tool <opencode|codex|claude|all|others> -ProjectName "<NAME>" -CssPrefix "<PREFIX>" -VisionModel "<PROVIDER/MODEL>" -Conflict <overwrite|skip|backup>
+pwsh -File "<SKILL_ROOT>/scripts/install.ps1" -TargetRoot "<PROJECT_ROOT>" -Tool <opencode|codex|claude|all|others|jspace> -ProjectName "<NAME>" -CssPrefix "<PREFIX>" -VisionModel "<PROVIDER/MODEL>" -Conflict <overwrite|skip|backup>
 ```
 
 ```bash
-bash "<SKILL_ROOT>/scripts/install.sh" --target "<PROJECT_ROOT>" --tool <opencode|codex|claude|all|others> --project-name "<NAME>" --css-prefix "<PREFIX>" --vision-model "<PROVIDER/MODEL>" --conflict <overwrite|skip|backup>
+bash "<SKILL_ROOT>/scripts/install.sh" --target "<PROJECT_ROOT>" --tool <opencode|codex|claude|all|others|jspace> --project-name "<NAME>" --css-prefix "<PREFIX>" --vision-model "<PROVIDER/MODEL>" --conflict <overwrite|skip|backup>
 ```
 
 若无法跑脚本，则按下方「手动映射」复制并做 `{{PROJECT_NAME}}` / `{{CSS_PREFIX}}` 替换。
@@ -108,6 +112,13 @@ bash "<SKILL_ROOT>/scripts/install.sh" --target "<PROJECT_ROOT>" --tool <opencod
 ### d — All
 
 依次 a、b、c。
+
+### f — J-Space（可选，独立或叠加）
+
+1. 复制 `SRC/j-space/` 整目录 → `DST/.grok/skills/j-space/`（保持内部相对路径完整，不动 modules/references/scripts 结构）  
+2. 渲染 `SRC/common/docs/j-space-bridge.md.template` → `DST/docs/ai-framework/j-space-bridge.md`  
+3. 复制 `SRC/j-space/rules/j-space-default.md` → `DST/.grok/rules/j-space-default.md`（Grok 常驻规则，**默认启用**，无需显式 `/j-space`）  
+4. 告知用户：J-Space 是默认推理时控制层，与阶段化计划驱动分层运行，详见桥接文档门控表
 
 ## 禁止事项
 
