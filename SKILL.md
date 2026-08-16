@@ -55,6 +55,7 @@ description: >
 
 - `PROJECT_NAME`：默认读目标项目 `package.json` 的 `name`，否则用目录名  
 - `CSS_PREFIX`：默认 `app`（用于 `--{{CSS_PREFIX}}-*` CSS 变量）  
+- `VISION_MODEL`（可选）：视觉子代理 `@vision-analyst` 所用的模型，默认 `oc-local/mimo-v2.5`；若目标环境 provider 名不同（如 `oc-local-18080/mimo-v2.5`）在此指定，或安装后改 `.opencode/agents/vision-analyst.md` 的 `model:` 行  
 - 是否写入 `architecture.md` / `coding-standards.md`（默认是）  
 
 ### 4. 冲突策略
@@ -64,11 +65,11 @@ description: >
 ### 5. 执行安装
 
 ```powershell
-pwsh -File "<SKILL_ROOT>/scripts/install.ps1" -TargetRoot "<PROJECT_ROOT>" -Tool <opencode|codex|claude|all|others> -ProjectName "<NAME>" -CssPrefix "<PREFIX>" -Conflict <overwrite|skip|backup>
+pwsh -File "<SKILL_ROOT>/scripts/install.ps1" -TargetRoot "<PROJECT_ROOT>" -Tool <opencode|codex|claude|all|others> -ProjectName "<NAME>" -CssPrefix "<PREFIX>" -VisionModel "<PROVIDER/MODEL>" -Conflict <overwrite|skip|backup>
 ```
 
 ```bash
-bash "<SKILL_ROOT>/scripts/install.sh" --target "<PROJECT_ROOT>" --tool <opencode|codex|claude|all|others> --project-name "<NAME>" --css-prefix "<PREFIX>" --conflict <overwrite|skip|backup>
+bash "<SKILL_ROOT>/scripts/install.sh" --target "<PROJECT_ROOT>" --tool <opencode|codex|claude|all|others> --project-name "<NAME>" --css-prefix "<PREFIX>" --vision-model "<PROVIDER/MODEL>" --conflict <overwrite|skip|backup>
 ```
 
 若无法跑脚本，则按下方「手动映射」复制并做 `{{PROJECT_NAME}}` / `{{CSS_PREFIX}}` 替换。
@@ -96,8 +97,9 @@ bash "<SKILL_ROOT>/scripts/install.sh" --target "<PROJECT_ROOT>" --tool <opencod
 6. 渲染 `SRC/common/docs/phased-plan-driven.md.template` → `DST/docs/ai-framework/phased-plan-driven.md`  
 7. 渲染 `SRC/common/docs/phase-plan.template.md` → `DST/docs/ai-framework/phase-plan.template.md`  
 8. 渲染 `SRC/common/docs/plans-README.md.template` → `DST/docs/ai-framework/plans/README.md`  
+9. 复制 `SRC/opencode/scripts/*` → `DST/.opencode/scripts/`（视觉子代理桥脚本）  
 
-替换规则：全文 `{{PROJECT_NAME}}`、`{{CSS_PREFIX}}`。
+替换规则：全文 `{{PROJECT_NAME}}`、`{{CSS_PREFIX}}`、`{{VISION_MODEL}}`（默认 `oc-local/mimo-v2.5`）。
 
 ### b — Codex / c — Claude / e — Others
 

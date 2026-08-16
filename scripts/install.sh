@@ -6,6 +6,7 @@ TARGET_ROOT=""
 TOOL=""
 PROJECT_NAME=""
 CSS_PREFIX="app"
+VISION_MODEL="oc-local/mimo-v2.5"
 CONFLICT="backup"
 SKILL_ROOT=""
 PERSONA=""
@@ -16,7 +17,7 @@ usage() {
 Usage:
   install.sh --target PATH --tool opencode|codex|claude|all|others
              [--project-name NAME] [--css-prefix PREFIX]
-             [--conflict overwrite|skip|backup] [--skill-root PATH]
+             [--vision-model PROVIDER/MODEL] [--conflict overwrite|skip|backup] [--skill-root PATH]
              [--persona FILENAME] [--no-persona]
 
 Notes:
@@ -31,6 +32,7 @@ while [[ $# -gt 0 ]]; do
     --tool) TOOL="$2"; shift 2 ;;
     --project-name) PROJECT_NAME="$2"; shift 2 ;;
     --css-prefix) CSS_PREFIX="$2"; shift 2 ;;
+    --vision-model) VISION_MODEL="$2"; shift 2 ;;
     --conflict) CONFLICT="$2"; shift 2 ;;
     --skill-root) SKILL_ROOT="$2"; shift 2 ;;
     --persona) PERSONA="$2"; shift 2 ;;
@@ -79,6 +81,7 @@ render_file() {
   # portable-ish replace without requiring envsubst for custom delimiters
   sed -e "s/{{PROJECT_NAME}}/${PROJECT_NAME//\//\\\/}/g" \
       -e "s/{{CSS_PREFIX}}/${CSS_PREFIX//\//\\\/}/g" \
+      -e "s/{{VISION_MODEL}}/${VISION_MODEL//\//\\\/}/g" \
       "$src" > "$dest"
   log "WRITE $dest"
 }
@@ -101,6 +104,9 @@ copy_tree() {
   local src="$1" dest="$2" render="${3:-0}"
   [[ -d "$src" ]] || { log "MISSING $src"; return; }
   while IFS= read -r -d '' f; do
+    case "$f" in
+      *__pycache__*|*.pyc) continue ;;
+    esac
     rel="${f#$src/}"
     rel="${rel#$src\\}"
     out="$dest/$rel"
@@ -173,6 +179,8 @@ install_opencode() {
   copy_file "$src/opencode.jsonc" "$dst/opencode.jsonc"
   copy_tree "$src/agents" "$dst/agents" 1
   copy_tree "$src/commands" "$dst/commands" 1
+  # 视觉子代理配套桥脚本（python，不渲染）
+  [[ -d "$src/scripts" ]] && copy_tree "$src/scripts" "$dst/scripts" 0
   local common="$TEMPLATES/common"
   render_file "$common/AGENTS.md.template" "$TARGET_ROOT/AGENTS.md"
   copy_file "$common/CODE_REVIEW.md" "$TARGET_ROOT/CODE_REVIEW.md"

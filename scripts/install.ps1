@@ -31,6 +31,7 @@ param(
 
   [string]$ProjectName = '',
   [string]$CssPrefix = 'app',
+  [string]$VisionModel = 'oc-local/mimo-v2.5',
   [ValidateSet('overwrite', 'skip', 'backup')]
   [string]$Conflict = 'backup',
   [string]$SkillRoot = ''
@@ -77,7 +78,7 @@ function Ensure-Dir {
 }
 
 function Render-Text([string]$text) {
-  return $text.Replace('{{PROJECT_NAME}}', $ProjectName).Replace('{{CSS_PREFIX}}', $CssPrefix)
+  return $text.Replace('{{PROJECT_NAME}}', $ProjectName).Replace('{{CSS_PREFIX}}', $CssPrefix).Replace('{{VISION_MODEL}}', $VisionModel)
 }
 
 function Place-File {
@@ -132,7 +133,9 @@ function Copy-Tree {
     Write-Log "MISSING source $SourceDir"
     return
   }
-  Get-ChildItem -LiteralPath $SourceDir -Recurse -File | ForEach-Object {
+  Get-ChildItem -LiteralPath $SourceDir -Recurse -File | Where-Object {
+    $_.FullName -notmatch '__pycache__' -and $_.Extension -ne '.pyc'
+  } | ForEach-Object {
     $rel = $_.FullName.Substring($SourceDir.Length).TrimStart('\', '/')
     $dest = Join-Path $DestDir $rel
     $render = $RenderMarkdown -and ($_.Extension -match '\.(md|template|jsonc|mdc)$' -or $_.Name -like '*.template')
@@ -152,6 +155,10 @@ function Install-OpenCode {
   Place-File -SourcePath (Join-Path $src 'opencode.jsonc') -DestPath (Join-Path $dst 'opencode.jsonc')
   Copy-Tree (Join-Path $src 'agents') (Join-Path $dst 'agents') -RenderMarkdown
   Copy-Tree (Join-Path $src 'commands') (Join-Path $dst 'commands') -RenderMarkdown
+  # 视觉子代理配套桥脚本（python，不渲染）
+  if (Test-Path (Join-Path $src 'scripts')) {
+    Copy-Tree (Join-Path $src 'scripts') (Join-Path $dst 'scripts')
+  }
 
   $common = Join-Path $Templates 'common'
   Place-File -SourcePath (Join-Path $common 'AGENTS.md.template') -DestPath (Join-Path $TargetRoot 'AGENTS.md') -Render

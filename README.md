@@ -40,6 +40,8 @@ npx skills add Userluckytian/ai-framework-skill@ai-framework -y
 | `/accept-phase` | 对照计划独立验收（基线 / 对照表 / 结论 / 下一步） |
 | `/review` | **提交前**综合审查（风格 + 测试 + 依赖） |
 
+视觉子代理 `@vision-analyst`：主力模型无视觉能力时，把图片/截图分析任务交给它（默认跑 `oc-local/mimo-v2.5`，见 `.opencode/agents/vision-analyst.md` 的 `model:` 行；桥脚本 `.opencode/scripts/vision-bridge.py` 支持自定义端点/密钥）。
+
 元规范落在：`docs/ai-framework/phased-plan-driven.md`（单阶段内：计划→交接→验收 + **验证不通过项下放机制**）。  
 多阶段/多执行者编排（总览 + 执行计划 + 并行派工）另见：`docs/ai-framework/plan-layering.md`。  
 计划实例：`docs/ai-framework/plans/`（也可继续用已有的 `docs/superpowers/plans/`）。  
