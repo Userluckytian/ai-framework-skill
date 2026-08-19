@@ -29,7 +29,7 @@ npx skills add Userluckytian/ai-framework-skill@ai-framework -y
 集成ai框架到当前项目
 ```
 
-按提示选择工具（OpenCode / Codex / Claude / All / Others / J-Space）即可。
+按提示选择工具（OpenCode / Codex / Claude / All 等）即可。
 
 ### 安装 OpenCode 后常用命令
 
@@ -48,8 +48,6 @@ npx skills add Userluckytian/ai-framework-skill@ai-framework -y
 
 **原则**：边界先于功能 → 计划可交接 → 任务可验证 → 验收认证据。
 
-**规模门控**（先判定，再走仪式）：S 小改零仪式 → M 中改针对性验证 → L 大改完整阶段流。小任务不再跑全量测试/审查。
-
 **三原则（元规范）**：任务定义落盘（不丢）→ 进度靠 commit+验收表判定（可恢复）→ 子代理任务幂等（可重放）。  
 > 落点：`docs/ai-framework/phased-plan-driven.md` §1.1。  
 
@@ -60,9 +58,8 @@ npx skills add Userluckytian/ai-framework-skill@ai-framework -y
 | 分区 | 来源 |
 |------|------|
 | `templates/opencode` | 自研 OpenCode agents / commands（审查四件套 + **phase-planner / phase-acceptor**） |
-| `templates/common/docs` | **阶段化计划驱动**元规范与计划模板；**规模门控**（S/M/L）；**J-Space 桥接**（选项 f） |
+| `templates/common/docs` | **阶段化计划驱动**元规范与计划模板 |
 | `templates/codex`、`claude`、`others` | [obra/superpowers](https://github.com/obra/superpowers)（MIT） |
-| `templates/j-space` | J-Space Cognition Suite V3.6（Apache-2.0，本地拷贝自 `D:\AI_Projects\J-Space-Cognition-Suite-V3.6`）推理时控制层，整块装入 `.grok/skills/j-space/` |
 | `templates/common` | AGENTS、提交/审查清单、可参数化编码与架构说明 |
 
 更多说明见 [docs/](docs/)、[SKILL.md](SKILL.md)、[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
