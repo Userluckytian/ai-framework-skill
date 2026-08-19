@@ -1,15 +1,13 @@
 # J-Space 默认推理协议（默认启用，无需显式召唤）
 
-本环境已安装 J-Space skill。**所有任务默认按 J-Space 推理协议执行**，用户不需要说 `/j-space`。
-
-skill 位置（按环境取其一）：项目级 `.grok/skills/j-space/` 或 `~/.opencode/skills/j-space/`；用户级 `~/.grok/skills/j-space/`。
+本仓库已安装 J-Space（`.grok/skills/j-space/`）。**所有任务默认按 J-Space 推理协议执行**，用户不需要说 `/j-space`。
 
 ## 门控（每个任务开始先分类，标一行内部或账本）
 
 | pass | 适用 | 加载 |
 |------|------|------|
 | **fast** | 一眼可核验（typo、格式化、直接回答） | 不加载任何模块，直接回答 |
-| **full** | 多步、单个交付物、一次阅读可验证 | 读 `SKILL.md` + 该任务命中的 1–2 个模块 |
+| **full** | 多步、单个交付物、一次阅读可验证 | 读 `.grok/skills/j-space/SKILL.md` + 该任务命中的 1–2 个模块 |
 | **loop** | 多阶段、多文件、跨轮、状态要携带 | 读 `modules/capacity.md`（开账本）+ `modules/broadcast.md` + 任务命中的模块 |
 
 **底线**：不能一眼核验的就不算 fast；任务变难立即升级，禁止用低档位逃避检查。
@@ -22,6 +20,6 @@ skill 位置（按环境取其一）：项目级 `.grok/skills/j-space/` 或 `~/
 
 ## 与项目流程的分工
 
-- 过程层（`AGENTS.md` 规模门控 S/M/L，若项目已装 ai-framework）决定**流程轻重**；J-Space 决定**思考质量**。共用一张门控表，详见项目内 `docs/ai-framework/j-space-bridge.md`（若有）。
-- 提交/交接/验收点是 **seam**：在此刷新账本、Inner 转 Outer，与项目的 `/review`、`/accept-phase`（若有）在同一道门汇合，不重复执行。
+- 过程层（`AGENTS.md` 规模门控 S/M/L）决定**流程轻重**；J-Space 决定**思考质量**。共用一张门控表，详见 `docs/ai-framework/j-space-bridge.md`。
+- 提交/交接/验收点是 **seam**：在此刷新账本、Inner 转 Outer，与 `/review`、`/accept-phase` 在同一道门汇合，不重复执行。
 - 用户显式说 `/j-space` 等同本规则。
