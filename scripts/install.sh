@@ -195,6 +195,8 @@ install_opencode() {
   render_file "$common/docs/phase-plan.template.md" "$af_docs/phase-plan.template.md"
   render_file "$common/docs/plan-layering.md.template" "$af_docs/plan-layering.md"
   render_file "$common/docs/plans-README.md.template" "$af_plans/README.md"
+  # 子代理脚手架（配 /new-agent 命令生成项目专属 agent）
+  render_file "$common/docs/agent.template.md" "$af_docs/agent.template.md"
 }
 
 install_codex() {

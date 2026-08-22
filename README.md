@@ -39,8 +39,13 @@ npx skills add Userluckytian/ai-framework-skill@ai-framework -y
 | `/handoff` | 生成可粘贴给执行 AI 的提示词 |
 | `/accept-phase` | 对照计划独立验收（基线 / 对照表 / 结论 / 下一步） |
 | `/review` | **提交前**综合审查（风格 + 测试 + 依赖） |
+| `/new-agent` | 按脚手架生成项目专属子代理（`.opencode/agents/<name>.md`） |
 
 视觉子代理 `@vision-analyst`：主力模型无视觉能力时，把图片/截图分析任务交给它（默认跑 `oc-local/mimo-v2.5`，见 `.opencode/agents/vision-analyst.md` 的 `model:` 行；桥脚本 `.opencode/scripts/vision-bridge.py` 支持自定义端点/密钥）。
+
+**新增项目专属子代理**：`/new-agent <职责描述>` 按脚手架 `docs/ai-framework/agent.template.md` 填空生成
+`.opencode/agents/<name>.md`——frontmatter 权限默认值、职责/输入/步骤/输出格式/禁止事项各段都带填写指引，
+让每个项目长出自己的专属 agent，而不是手工拷贝既有代理改造。
 
 元规范落在：`docs/ai-framework/phased-plan-driven.md`（单阶段内：计划→交接→验收 + **验证不通过项下放机制**）。  
 多阶段/多执行者编排（总览 + 执行计划 + 并行派工）另见：`docs/ai-framework/plan-layering.md`。  

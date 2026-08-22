@@ -48,8 +48,9 @@
 - `.opencode/commands/plan-phase.md`、`accept-phase.md`、`handoff.md`  
 - `docs/ai-framework/phased-plan-driven.md`  
 - `docs/ai-framework/phase-plan.template.md`  
-- `docs/ai-framework/plan-layering.md`（多阶段编排：总览/执行分层 + 并行派工表）
+- `docs/ai-framework/plan-layering.md`（多阶段编排：总览/执行分层 + 并行派工表）  
 - `docs/ai-framework/plans/README.md`  
+- `docs/ai-framework/agent.template.md` + `/new-agent`（子代理脚手架：按模板填空生成项目专属 agent，权限默认值固化既有实践）  
 
 ## 实践来源
 

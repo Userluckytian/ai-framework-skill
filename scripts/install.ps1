@@ -176,6 +176,8 @@ function Install-OpenCode {
   Place-File -SourcePath ([System.IO.Path]::Combine($commonDocs, 'phase-plan.template.md')) -DestPath ([System.IO.Path]::Combine($afDocs, 'phase-plan.template.md')) -Render
   Place-File -SourcePath ([System.IO.Path]::Combine($commonDocs, 'plan-layering.md.template')) -DestPath ([System.IO.Path]::Combine($afDocs, 'plan-layering.md')) -Render
   Place-File -SourcePath ([System.IO.Path]::Combine($commonDocs, 'plans-README.md.template')) -DestPath ([System.IO.Path]::Combine($afPlans, 'README.md')) -Render
+  # 子代理脚手架（配 /new-agent 命令生成项目专属 agent）
+  Place-File -SourcePath ([System.IO.Path]::Combine($commonDocs, 'agent.template.md')) -DestPath ([System.IO.Path]::Combine($afDocs, 'agent.template.md')) -Render
 }
 
 function Install-Codex {
