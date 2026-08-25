@@ -176,6 +176,19 @@ install_issue_log() {
   local issue_log="$TARGET_ROOT/docs/issue-log"
   ensure_dir "$issue_log"
   render_file "$TEMPLATES/common/docs/issue-log-README.md.template" "$issue_log/README.md"
+
+  # 入库策略：只入库 README.md，每日日志不入库（自动写入/追加 .gitignore）
+  local gi="$TARGET_ROOT/.gitignore"
+  local gi_block="# 按天问题日志（只入库约定文档 README.md，每日日志本地保留不入库）"
+  if [[ ! -f "$gi" ]]; then
+    printf '# ai-framework: 按天问题日志入库策略\n%s\ndocs/issue-log/*\n!docs/issue-log/README.md\n' "$gi_block" > "$gi"
+    log "WRITE $gi (created with issue-log ignore rule)"
+  elif ! grep -qF "docs/issue-log/*" "$gi"; then
+    printf '\n# ai-framework: 按天问题日志入库策略\n%s\ndocs/issue-log/*\n!docs/issue-log/README.md\n' "$gi_block" >> "$gi"
+    log "APPEND $gi (issue-log ignore rule)"
+  else
+    log "SKIP  $gi (issue-log ignore rule already present)"
+  fi
 }
 
 install_opencode() {

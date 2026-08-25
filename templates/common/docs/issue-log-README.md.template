@@ -65,3 +65,19 @@ docs/issue-log/
 2. 状态变化实时更新;修复后**必须**把「已修复待验证」改为「已关闭」并附验证证据。
 3. 未关闭项次日**自动带过**(复制到新文件,不得静默消失)。
 4. 每个条目至少包含:描述 / 分析 / 修改结果 / 状态 四要素。
+
+## 入库策略(git)
+
+**只入库约定文档 `README.md`,每日日志 `YYYY-MM-DD.md` 一律不入库**(本地研发笔记)。
+
+安装本框架时已自动在项目 `.gitignore` 写入:
+
+```gitignore
+# 按天问题日志（只入库约定文档 README.md，每日日志本地保留不入库）
+docs/issue-log/*
+!docs/issue-log/README.md
+```
+
+- 每日日志是**本地研发过程笔记**,不随仓库分发(和 `docs/AI-TESTING-GUIDE.md` 等本地文档同策略)。
+- 提交前核对 `git status`,确认 `docs/issue-log/YYYY-MM-DD.md` 未出现在暂存区。
+- 若你的团队希望日志也入库,删除 `.gitignore` 中上述两行即可。

@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
   Install AI framework templates into a project root (project-level only).
 
@@ -153,6 +153,22 @@ function Install-IssueLog {
   Ensure-Dir -Dir $issueLog
   $commonDocs = Join-Path $Templates 'common\docs'
   Place-File -SourcePath ([System.IO.Path]::Combine($commonDocs, 'issue-log-README.md.template')) -DestPath ([System.IO.Path]::Combine($issueLog, 'README.md')) -Render
+
+  # 入库策略：只入库 README.md，每日日志不入库（自动写入/追加 .gitignore）
+  $gi = [System.IO.Path]::Combine($TargetRoot, '.gitignore')
+  $giBlock = '# 按天问题日志（只入库约定文档 README.md，每日日志本地保留不入库）'
+  $giRule = "docs/issue-log/*`n!docs/issue-log/README.md"
+  if (-not [System.IO.File]::Exists($gi)) {
+    $content = "# ai-framework: 按天问题日志入库策略`n$giBlock`n$giRule`n"
+    [System.IO.File]::WriteAllText($gi, $content, [System.Text.UTF8Encoding]::new($false))
+    Write-Log "WRITE $gi (created with issue-log ignore rule)"
+  } elseif (-not ([System.IO.File]::ReadAllText($gi) -match 'docs/issue-log/\*')) {
+    $content = "`n# ai-framework: 按天问题日志入库策略`n$giBlock`n$giRule`n"
+    [System.IO.File]::AppendAllText($gi, $content, [System.Text.UTF8Encoding]::new($false))
+    Write-Log "APPEND $gi (issue-log ignore rule)"
+  } else {
+    Write-Log "SKIP  $gi (issue-log ignore rule already present)"
+  }
 }
 
 function Install-OpenCode {
