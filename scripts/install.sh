@@ -171,6 +171,13 @@ select_persona_interactive() {
   fi
 }
 
+install_issue_log() {
+  # 按天问题日志（强制）：约定文档。入口文档（AGENTS/CLAUDE）会引用 docs/issue-log/README.md
+  local issue_log="$TARGET_ROOT/docs/issue-log"
+  ensure_dir "$issue_log"
+  render_file "$TEMPLATES/common/docs/issue-log-README.md.template" "$issue_log/README.md"
+}
+
 install_opencode() {
   log "=== OpenCode ==="
   local src="$TEMPLATES/opencode"
@@ -195,8 +202,11 @@ install_opencode() {
   render_file "$common/docs/phase-plan.template.md" "$af_docs/phase-plan.template.md"
   render_file "$common/docs/plan-layering.md.template" "$af_docs/plan-layering.md"
   render_file "$common/docs/plans-README.md.template" "$af_plans/README.md"
+
   # 子代理脚手架（配 /new-agent 命令生成项目专属 agent）
   render_file "$common/docs/agent.template.md" "$af_docs/agent.template.md"
+
+  install_issue_log
 }
 
 install_codex() {
@@ -228,6 +238,8 @@ install_claude() {
 
   ensure_dir "$TARGET_ROOT/docs/ai-framework"
   copy_file "$src/INSTALL.md" "$TARGET_ROOT/docs/ai-framework/claude-INSTALL.md"
+
+  install_issue_log
 }
 
 install_others() {

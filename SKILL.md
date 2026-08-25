@@ -43,7 +43,7 @@ description: >
 
 | 选项 | 含义 |
 |------|------|
-| **a** OpenCode（Recommended） | `.opencode` agents/commands（**含阶段流**）+ 公共规范 + `docs/ai-framework/phased-plan-driven.md` |
+| **a** OpenCode（Recommended） | `.opencode` agents/commands（**含阶段流**）+ 公共规范 + `docs/ai-framework/phased-plan-driven.md` + `docs/issue-log/README.md`（按天问题日志） |
 | **b** Codex | superpowers Codex 项目级切片 |
 | **c** Claude Code | superpowers Claude 项目级切片 |
 | **d** All | a + b + c |
@@ -99,7 +99,8 @@ bash "<SKILL_ROOT>/scripts/install.sh" --target "<PROJECT_ROOT>" --tool <opencod
 7. 渲染 `SRC/common/docs/phase-plan.template.md` → `DST/docs/ai-framework/phase-plan.template.md`  
 8. 渲染 `SRC/common/docs/plans-README.md.template` → `DST/docs/ai-framework/plans/README.md`  
 9. 复制 `SRC/opencode/scripts/*` → `DST/.opencode/scripts/`（视觉子代理桥脚本）  
-10. 渲染 `SRC/common/docs/agent.template.md` → `DST/docs/ai-framework/agent.template.md`（子代理脚手架，配 `/new-agent` 命令按需生成项目专属 agent）
+10. 渲染 `SRC/common/docs/agent.template.md` → `DST/docs/ai-framework/agent.template.md`（子代理脚手架，配 `/new-agent` 命令按需生成项目专属 agent）  
+11. 渲染 `SRC/common/docs/issue-log-README.md.template` → `DST/docs/issue-log/README.md`（按天问题日志约定）
 
 替换规则：全文 `{{PROJECT_NAME}}`、`{{CSS_PREFIX}}`、`{{VISION_MODEL}}`（默认 `oc-local/mimo-v2.5`）。
 
