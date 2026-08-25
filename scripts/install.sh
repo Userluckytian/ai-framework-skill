@@ -176,6 +176,8 @@ install_issue_log() {
   local issue_log="$TARGET_ROOT/docs/issue-log"
   ensure_dir "$issue_log"
   render_file "$TEMPLATES/common/docs/issue-log-README.md.template" "$issue_log/README.md"
+  # 开放事项索引（只放未关闭项，AI 每天开工第一读）
+  render_file "$TEMPLATES/common/docs/issue-log-OPEN.md.template" "$issue_log/OPEN.md"
 
   # 入库策略：只入库 README.md，每日日志不入库（自动写入/追加 .gitignore）
   local gi="$TARGET_ROOT/.gitignore"

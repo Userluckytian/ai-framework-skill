@@ -153,6 +153,8 @@ function Install-IssueLog {
   Ensure-Dir -Dir $issueLog
   $commonDocs = Join-Path $Templates 'common\docs'
   Place-File -SourcePath ([System.IO.Path]::Combine($commonDocs, 'issue-log-README.md.template')) -DestPath ([System.IO.Path]::Combine($issueLog, 'README.md')) -Render
+  # 开放事项索引（只放未关闭项，AI 每天开工第一读）
+  Place-File -SourcePath ([System.IO.Path]::Combine($commonDocs, 'issue-log-OPEN.md.template')) -DestPath ([System.IO.Path]::Combine($issueLog, 'OPEN.md')) -Render
 
   # 入库策略：只入库 README.md，每日日志不入库（自动写入/追加 .gitignore）
   $gi = [System.IO.Path]::Combine($TargetRoot, '.gitignore')
