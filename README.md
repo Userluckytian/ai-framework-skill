@@ -6,19 +6,19 @@
 > <font color="#008000"><strong>写代码想靠 AI 守住规范与交付节奏，却每个项目都要重新配置？</strong></font>  
 > <font color="#008000"><strong>ai-framework-skill：一次集成，审查流 + 阶段计划/验收跟项目走。</strong></font>
 
-> [!NOTE]
-> **仅项目级** — 配置只写入目标业务项目根目录，不写入各 IDE 全局目录。
+> [!IMPORTANT]
+> **只安装在项目级别，不要全局安装。** 本 skill 的设计意图就是把审查流、阶段计划/验收、按天问题日志等能力**跟业务项目走**——配置只写入目标项目根目录。全局安装会把 `.opencode/`、`AGENTS.md` 等框架文件写进 IDE 全局目录，污染所有项目（无关项目也会加载同一套 agent/命令，互相干扰）。
 
 - GitHub: https://github.com/Userluckytian/ai-framework-skill
 
 ## 安装
 
 ```bash
-# 全局（推荐，各项目可用）
-npx skills add Userluckytian/ai-framework-skill@ai-framework -g -y
-
-# 仅当前项目
+# 仅当前项目（强烈推荐，也是唯一推荐方式）
 npx skills add Userluckytian/ai-framework-skill@ai-framework -y
+
+# 全局（不建议：会污染 IDE 全局目录，请勿使用）
+# npx skills add Userluckytian/ai-framework-skill@ai-framework -g -y
 ```
 
 ## 使用
