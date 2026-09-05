@@ -50,6 +50,8 @@ npx skills add Userluckytian/ai-framework-skill@ai-framework -y
 元规范落在：`docs/ai-framework/phased-plan-driven.md`（单阶段内：计划→交接→验收 + **验证不通过项下放机制**）。  
 
 **token 预算取舍**：开工前询问「实施档位（简约/经济/全能/豪华，默认全能）+ 是否启用子代理」。档位决定本阶段做多少——**未做的环节记为「跳过」而非「缺陷」**，token 充足时再询问是否补做；低调档位 ≠ 全绿。子代理只作用于需要「独立角色」的代码审查与验收。  
+
+**运行模式**：默认**交互式**（每阶段等你确认）；可显式开启**目标模式**——宏观目标（如全部模块）已明确时，AI 自主连续推进「计划→实施→验证→验收→下放」，等不了的人工验证项只**标记「待人工」继续**，红线仍要授权，**全部完成才停**（见 `phased-plan-driven.md` §12）。  
 多阶段/多执行者编排（总览 + 执行计划 + 并行派工）另见：`docs/ai-framework/plan-layering.md`。  
 计划实例：`docs/ai-framework/plans/`（也可继续用已有的 `docs/superpowers/plans/`）。  
 
