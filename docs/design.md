@@ -34,7 +34,7 @@
                       ↑ 单次 commit
 ┌─────────────────────────────────────────────┐
 │  项目规范文档                                 │
-│  AGENTS / coding-standards / architecture   │
+│  AGENTS / coding-standards                  │
 └─────────────────────────────────────────────┘
 ```
 
