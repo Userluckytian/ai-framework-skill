@@ -20,7 +20,6 @@
 | `AGENTS.md` | `templates/common/AGENTS.md.template` | 代理入口（阶段流 + 审查流） |
 | `CODE_REVIEW.md` | `templates/common/` | 提交审查清单 |
 | `coding-standards.md` | 模板渲染 | 编码规范 |
-| `architecture.md` | 模板渲染 | 架构说明 |
 | `docs/ai-framework/phased-plan-driven.md` | `common/docs/*.template` | **阶段化元规范** |
 | `docs/ai-framework/phase-plan.template.md` | 同上 | 单阶段空白计划 |
 | `docs/ai-framework/plans/` | 安装时创建 | 阶段计划实例目录 |

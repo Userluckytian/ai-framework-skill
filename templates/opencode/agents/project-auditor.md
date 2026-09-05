@@ -16,7 +16,6 @@ permission:
 
 ## 项目参考文档
 
-- `architecture.md` — 技术栈、目录结构、认证流程、RBAC 模型、主题系统、API 层设计
 - `coding-standards.md` — 命名规范、Vue 组件规范、TypeScript 规范、CSS 规范、Git 提交规范
 - `CODE_REVIEW.md` — 代码审查要点
 - `package.json` — 依赖版本信息
@@ -24,7 +23,6 @@ permission:
 ## 检查清单
 
 ### 1. 架构合理性
-- 目录结构是否与 `architecture.md` 描述一致
 - 是否有未完成或占位模块（如 `CgCesium` 占位组件）
 - 模块依赖关系是否清晰、是否存在循环依赖
 

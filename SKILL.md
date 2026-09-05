@@ -56,7 +56,7 @@ description: >
 - `PROJECT_NAME`：默认读目标项目 `package.json` 的 `name`，否则用目录名  
 - `CSS_PREFIX`：默认 `app`（用于 `--{{CSS_PREFIX}}-*` CSS 变量）  
 - `VISION_MODEL`（可选）：视觉子代理 `@vision-analyst` 所用的模型，默认 `oc-local/mimo-v2.5`；若目标环境 provider 名不同（如 `oc-local-18080/mimo-v2.5`）在此指定，或安装后改 `.opencode/agents/vision-analyst.md` 的 `model:` 行  
-- 是否写入 `architecture.md` / `coding-standards.md`（默认是）  
+- 是否写入 `coding-standards.md`（默认是）  
 
 ### 4. 冲突策略
 
@@ -94,15 +94,14 @@ bash "<SKILL_ROOT>/scripts/install.sh" --target "<PROJECT_ROOT>" --tool <opencod
 2. 渲染 `SRC/common/AGENTS.md.template` → `DST/AGENTS.md`  
 3. 复制 `SRC/common/CODE_REVIEW.md` → `DST/CODE_REVIEW.md`  
 4. 渲染 `SRC/common/coding-standards.md.template` → `DST/coding-standards.md`  
-5. 渲染 `SRC/common/architecture.md.template` → `DST/architecture.md`（若用户需要）  
-6. 渲染 `SRC/common/docs/phased-plan-driven.md.template` → `DST/docs/ai-framework/phased-plan-driven.md`  
-7. 渲染 `SRC/common/docs/phase-plan.template.md` → `DST/docs/ai-framework/phase-plan.template.md`  
-8. 渲染 `SRC/common/docs/plans-README.md.template` → `DST/docs/ai-framework/plans/README.md`  
-9. 复制 `SRC/opencode/scripts/*` → `DST/.opencode/scripts/`（视觉子代理桥脚本）  
-10. 渲染 `SRC/common/docs/agent.template.md` → `DST/docs/ai-framework/agent.template.md`（子代理脚手架，配 `/new-agent` 命令按需生成项目专属 agent）  
-11. 渲染 `SRC/common/docs/issue-log-README.md.template` → `DST/docs/issue-log/README.md`（按天问题日志约定）  
-12. 渲染 `SRC/common/docs/issue-log-OPEN.md.template` → `DST/docs/issue-log/OPEN.md`（开放事项索引，只放未关闭项，AI 每天开工第一读）  
-13. 在 `DST/.gitignore` 追加入库策略：`docs/issue-log/*` + `!docs/issue-log/README.md`（只入库约定文档，每日日志不入库；无 .gitignore 则创建）
+5. 渲染 `SRC/common/docs/phased-plan-driven.md.template` → `DST/docs/ai-framework/phased-plan-driven.md`  
+6. 渲染 `SRC/common/docs/phase-plan.template.md` → `DST/docs/ai-framework/phase-plan.template.md`  
+7. 渲染 `SRC/common/docs/plans-README.md.template` → `DST/docs/ai-framework/plans/README.md`  
+8. 复制 `SRC/opencode/scripts/*` → `DST/.opencode/scripts/`（视觉子代理桥脚本）  
+9. 渲染 `SRC/common/docs/agent.template.md` → `DST/docs/ai-framework/agent.template.md`（子代理脚手架，配 `/new-agent` 命令按需生成项目专属 agent）  
+10. 渲染 `SRC/common/docs/issue-log-README.md.template` → `DST/docs/issue-log/README.md`（按天问题日志约定）  
+11. 渲染 `SRC/common/docs/issue-log-OPEN.md.template` → `DST/docs/issue-log/OPEN.md`（开放事项索引，只放未关闭项，AI 每天开工第一读）  
+12. 在 `DST/.gitignore` 追加入库策略：`docs/issue-log/*` + `!docs/issue-log/README.md`（只入库约定文档，每日日志不入库；无 .gitignore 则创建）
 
 替换规则：全文 `{{PROJECT_NAME}}`、`{{CSS_PREFIX}}`、`{{VISION_MODEL}}`（默认 `oc-local/mimo-v2.5`）。
 

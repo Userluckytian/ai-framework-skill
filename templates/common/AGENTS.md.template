@@ -19,7 +19,7 @@
 2. **验收认证据**：测试/构建命令实际跑过；禁止「应该能过」。  
 3. **密钥不进 git**；破坏性操作与 push 远程需人类明确授权。  
 4. **Git 提交**见下文规范；默认不 push。  
-5. 编码与架构约定见 `coding-standards.md`、`architecture.md`（若存在）。  
+5. 编码约定见 `coding-standards.md`（若存在）。  
 6. **按天问题日志**：处理任何问题/需求时，同步维护 `docs/issue-log/YYYY-MM-DD.md`（描述 / 分析 / 修改结果 / 状态）；修复后更新状态为「已关闭」并附验证证据；未关闭项次日自动带过。**开工先读 `docs/issue-log/OPEN.md`（开放事项索引，只读它即可掌握全部未完成项，无需翻历史日志）**，再按需读对应日期文件。约定详见 `docs/issue-log/README.md`。
 
 ## OpenCode 命令

@@ -25,7 +25,7 @@
 
 ## 代码规范
 
-- 以仓库内 `coding-standards.md` / `architecture.md` 为准（若存在）
+- 以仓库内 `coding-standards.md` 为准（若存在）
 - 最小修改原则：不推倒重构，只改动必要部分
 - 密钥与真实凭证不进 git；验收认命令输出不认「应该能过」
 

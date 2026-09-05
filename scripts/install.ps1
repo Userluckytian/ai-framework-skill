@@ -190,7 +190,6 @@ function Install-OpenCode {
   Place-File -SourcePath (Join-Path $common 'AGENTS.md.template') -DestPath (Join-Path $TargetRoot 'AGENTS.md') -Render
   Place-File -SourcePath (Join-Path $common 'CODE_REVIEW.md') -DestPath (Join-Path $TargetRoot 'CODE_REVIEW.md')
   Place-File -SourcePath (Join-Path $common 'coding-standards.md.template') -DestPath (Join-Path $TargetRoot 'coding-standards.md') -Render
-  Place-File -SourcePath (Join-Path $common 'architecture.md.template') -DestPath (Join-Path $TargetRoot 'architecture.md') -Render
 
   # 阶段化计划驱动（元规范 + 空白计划模板 + plans 目录）
   # 使用 Combine，避免 Join-Path 多段 ChildPath 在部分主机上异常

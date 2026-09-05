@@ -16,7 +16,8 @@ usage() {
   cat <<'EOF'
 Usage:
   install.sh --target PATH --tool opencode|codex|claude|all|others
-             [--project-name NAME] [--css-prefix PREFIX]
+                        [--project-name NAME]
+             [--css-prefix PREFIX]
              [--vision-model PROVIDER/MODEL] [--conflict overwrite|skip|backup] [--skill-root PATH]
              [--persona FILENAME] [--no-persona]
 
@@ -207,7 +208,6 @@ install_opencode() {
   render_file "$common/AGENTS.md.template" "$TARGET_ROOT/AGENTS.md"
   copy_file "$common/CODE_REVIEW.md" "$TARGET_ROOT/CODE_REVIEW.md"
   render_file "$common/coding-standards.md.template" "$TARGET_ROOT/coding-standards.md"
-  render_file "$common/architecture.md.template" "$TARGET_ROOT/architecture.md"
 
   # Phased plan-driven delivery
   local af_docs="$TARGET_ROOT/docs/ai-framework"
