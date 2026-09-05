@@ -48,6 +48,8 @@ npx skills add Userluckytian/ai-framework-skill@ai-framework -y
 让每个项目长出自己的专属 agent，而不是手工拷贝既有代理改造。
 
 元规范落在：`docs/ai-framework/phased-plan-driven.md`（单阶段内：计划→交接→验收 + **验证不通过项下放机制**）。  
+
+**token 预算取舍**：开工前询问「实施档位（简约/经济/全能/豪华，默认全能）+ 是否启用子代理」。档位决定本阶段做多少——**未做的环节记为「跳过」而非「缺陷」**，token 充足时再询问是否补做；低调档位 ≠ 全绿。子代理只作用于需要「独立角色」的代码审查与验收。  
 多阶段/多执行者编排（总览 + 执行计划 + 并行派工）另见：`docs/ai-framework/plan-layering.md`。  
 计划实例：`docs/ai-framework/plans/`（也可继续用已有的 `docs/superpowers/plans/`）。  
 
@@ -65,7 +67,7 @@ npx skills add Userluckytian/ai-framework-skill@ai-framework -y
 | `templates/opencode` | 自研 OpenCode agents / commands（审查四件套 + **phase-planner / phase-acceptor**） |
 | `templates/common/docs` | **阶段化计划驱动**元规范与计划模板 |
 | `templates/codex`、`claude`、`others` | [obra/superpowers](https://github.com/obra/superpowers)（MIT） |
-| `templates/common` | AGENTS、提交/审查清单、可参数化编码与架构说明 |
+| `templates/common` | AGENTS、提交/审查清单、可参数化编码规范 |
 
 更多说明见 [docs/](docs/)、[SKILL.md](SKILL.md)、[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
 
